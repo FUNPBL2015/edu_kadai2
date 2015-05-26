@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  maptest
 //
-//  Created by Seiya Kurokome on 2015/05/20.
-//  Copyright (c) 2015年 Seiya Kurokome. All rights reserved.
+//  Created by Yuto Kumagai on 2015/05/20.
+//  Copyright (c) 2015年 Yuto Kumagai. All rights reserved.
 //
 
 import UIKit
