@@ -34,7 +34,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         
         myLocationManager.delegate = self
         myLocationManager.distanceFilter = kCLHeadingFilterNone
-        myLocationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        myLocationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         
         myLocationManager.startUpdatingLocation()
         
