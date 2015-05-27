@@ -2,33 +2,30 @@
 //  ViewController.swift
 //  maptest
 //
-//  Created by 新保遥平 on 2015/05/20.
-//  Copyright (c) 2015年 Yohei Shinpo. All rights reserved.
+//  Created by Yuto Kumagai on 2015/05/20.
+//  Copyright (c) 2015年 Yuto Kumagai. All rights reserved.
 //
 
 import UIKit
 import MapKit
-class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate{
-    
-    @IBOutlet weak var myMapView: MKMapView!
+
+class ViewController: UIViewController,MKMapViewDelegate, CLLocationManagerDelegate{
+
+    @IBOutlet weak var MyMapView: MKMapView!
     var myLocationManager: CLLocationManager!
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        var myURL = NSURL(string:"http://www.fun.ac.jp/")
+        self.MyMapView?.delegate = self
         
-        
-        self.myMapView?.delegate = self
-        
-        var region:MKCoordinateRegion = self.myMapView!.region
-        var location:CLLocationCoordinate2D
-        = CLLocationCoordinate2DMake(41.842011,140.766987)
+        var region:MKCoordinateRegion = self.MyMapView!.region
+        var location:CLLocationCoordinate2D = CLLocationCoordinate2DMake(41.842011,140.766987)
         region.center = location
         region.span.latitudeDelta = 0.005
         region.span.longitudeDelta = 0.005
         
-        self.myMapView!.setRegion(region, animated: true)
+        self.MyMapView!.setRegion(region,animated:true)
         
         myLocationManager = CLLocationManager()
         
@@ -42,39 +39,43 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         myPin.coordinate = location
         myPin.title = "公立はこだて未来大学"
         myPin.subtitle = "亀田中野町116番地2"
-        
-        myMapView.addAnnotation(myPin)
-        
-        // 長押しのUIGestureRecognizerを生成.
-        var myLongPress: UILongPressGestureRecognizer = UILongPressGestureRecognizer()
-        
-        myLongPress.addTarget(self, action: "recognizeLongPress:")
-        
-        // MapViewにUIGestureRecognizerを追加.
-        
-        myMapView.addGestureRecognizer(myLongPress)
-        
-    }
-    
-    func recognizeLongPress(sender: UILongPressGestureRecognizer) {
-        
-        
-        let url = "http://www.fun.ac.jp/"
-        let targetURL = NSURL(string: url)
-        UIApplication.sharedApplication().openURL(targetURL!)//Safariでとばす
-        
+        MyMapView.addAnnotation(myPin)
     }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations:[AnyObject]!) {
-        
-        
-        myMapView.showsUserLocation = true
+        MyMapView.showsUserLocation = true
     }
     
+    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+        let reuseId = "pin"
+        
+        var pinView = mapView.dequeueReusableAnnotationViewWithIdentifier(reuseId) as? MKPinAnnotationView
+        if pinView == nil{
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = true
+            pinView!.animatesDrop = true
+            pinView!.pinColor = .Purple
+            
+            var rightButton: AnyObject! = UIButton.buttonWithType(UIButtonType.DetailDisclosure)
+            pinView!.rightCalloutAccessoryView = rightButton as? UIView
+        }
+        else {
+            pinView!.annotation = annotation
+        }
+        return pinView
+    }
+    
+    func mapView(mapView: MKMapView!, annotationView: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        
+         performSegueWithIdentifier("web",sender: nil)
+        
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
+
 }
 
